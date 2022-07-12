@@ -12,12 +12,13 @@ describe("New Category", () => {
     });
     expect(category.props.created_at).toBeInstanceOf(Date);
 
+    let created_at = new Date();
     category = new Category({
       name: "Movie 1",
       description: "desc",
       is_active: false,
+      created_at,
     });
-    let created_at = new Date();
     expect(category.props).toStrictEqual({
       name: "Movie 1",
       description: "desc",
@@ -52,5 +53,70 @@ describe("New Category", () => {
       name: "Movie 2",
       created_at,
     });
+  });
+
+  test("getter of name props", () => {
+    const category = new Category({ name: "Movie" });
+    expect(category.name).toBe("Movie");
+  });
+
+  test("getter and setter of description props", () => {
+    const category1 = new Category({ name: "Movie" });
+    expect(category1.description).toBeNull();
+
+    const category2 = new Category({
+      name: "Movie",
+      description: "Desc Movie",
+    });
+    expect(category2.description).toBe("Desc Movie");
+
+    const category3 = new Category({
+      name: "Movie",
+    });
+    category3["description"] = "Other Desc Movie";
+    expect(category3.description).toBe("Other Desc Movie");
+    category3["description"] = undefined;
+    expect(category3.description).toBeNull();
+    category3["description"] = null;
+    expect(category3.description).toBeNull();
+  });
+
+  test("getter and setter of is_active props", () => {
+    let category = new Category({
+      name: "Movie",
+    });
+    expect(category.is_active).toBeTruthy();
+
+    category = new Category({
+      name: "Movie",
+      is_active: true,
+    });
+    expect(category.is_active).toBeTruthy();
+
+    category["is_active"] = false;
+    expect(category.is_active).toBeFalsy();
+
+    category = new Category({
+      name: "Movie",
+      is_active: false,
+    });
+    expect(category.is_active).toBeFalsy();
+
+    category["is_active"] = true;
+    expect(category.is_active).toBeTruthy();
+  });
+
+  test("getter of created_at prop", () => {
+    let category = new Category({
+      name: "Movie",
+    });
+    expect(category.created_at).toBeInstanceOf(Date);
+
+    let created_at = new Date();
+    category = new Category({
+      name: "Movie",
+      created_at,
+    });
+    expect(category.created_at).toBe(created_at);
   });
 });
