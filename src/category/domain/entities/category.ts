@@ -1,12 +1,20 @@
+import { v4 as uuidv4 } from "uuid";
+
 export type CategoryProps = {
   name: string;
   description?: string;
   is_active?: boolean;
   created_at?: Date;
 };
-
+// entidade - identidade, comportamento e atributos
+// id auto incremento?
+// politica e detalhes
+// UUID - Universally Unique Identifier V4 - IETF RFC
 export default class Category {
-  constructor(public readonly props: CategoryProps) {
+  public readonly id: string;
+
+  constructor(public readonly props: CategoryProps, id?: string) {
+    this.id = id || uuidv4();
     this.description = this.props.description;
     this.is_active = this.props.is_active;
     this.props.created_at = this.props.created_at ?? new Date();
