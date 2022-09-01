@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import UniqueEntityId from "./@seedwork/domain/unique-entity-id.vo";
 
 export type CategoryProps = {
   name: string;
@@ -11,10 +11,10 @@ export type CategoryProps = {
 // politica e detalhes
 // UUID - Universally Unique Identifier V4 - IETF RFC
 export default class Category {
-  public readonly id: string;
+  public readonly id: UniqueEntityId;
 
-  constructor(public readonly props: CategoryProps, id?: string) {
-    this.id = id || uuidv4();
+  constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
+    this.id = id || new UniqueEntityId();
     this.description = this.props.description;
     this.is_active = this.props.is_active;
     this.props.created_at = this.props.created_at ?? new Date();
