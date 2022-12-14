@@ -1,6 +1,6 @@
 import Category, { CategoryProps } from "./category";
 import { omit } from "lodash";
-import UniqueEntityId from "./@seedwork/domain/unique-entity-id.vo";
+import UniqueEntityId from "../../../@seedwork/domain/unique-entity-id.vo";
 
 describe("New Category", () => {
   it("should be able to create a new category", () => {
@@ -57,7 +57,7 @@ describe("New Category", () => {
   });
 
   test("id field", () => {
-    type CategoryData = { props: CategoryProps; id?: UniqueEntityId };
+    type CategoryData = { props: CategoryProps; id?: UniqueEntityId | string };
     const data: CategoryData[] = [
       { props: { name: "Movie" } },
       { props: { name: "Movie" }, id: null },
