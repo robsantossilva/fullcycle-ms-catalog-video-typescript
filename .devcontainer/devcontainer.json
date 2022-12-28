@@ -25,7 +25,8 @@
     "vivaxy.vscode-conventional-commits",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "SonarSource.sonarlint-vscode"
+    "SonarSource.sonarlint-vscode",
+    "Orta.vscode-jest"
   ]
 
   // Features to add to the dev container. More info: https://containers.dev/features.
