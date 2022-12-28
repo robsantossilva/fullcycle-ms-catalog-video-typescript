@@ -1,6 +1,6 @@
 import Category, { CategoryProps } from "./category";
 import { omit } from "lodash";
-import { validate as uuidValidate } from "uuid";
+import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 
 describe("New Category", () => {
   it("should be able to create a new category", () => {
@@ -57,25 +57,28 @@ describe("New Category", () => {
   });
 
   test("id field", () => {
-    type CategoryData = { props: CategoryProps; id?: string };
+    type CategoryData = { props: CategoryProps; id?: UniqueEntityId | string };
     const data: CategoryData[] = [
       { props: { name: "Movie" } },
       { props: { name: "Movie" }, id: null },
       { props: { name: "Movie" }, id: undefined },
       { props: { name: "Movie" }, id: "" },
-      { props: { name: "Movie" }, id: "9425c5bf-0657-417d-8e86-8a5688b6b9a3" },
+      { props: { name: "Movie" }, id: new UniqueEntityId() },
     ];
 
     data.forEach((i) => {
-      const category = new Category(i.props, i.id);
+      const category = new Category(i.props, i.id as any);
       expect(category.id).not.toBeNull();
-      expect(uuidValidate(category.id)).toBeTruthy();
+      expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
     });
   });
 
   test("getter of name props", () => {
     const category = new Category({ name: "Movie" });
     expect(category.name).toBe("Movie");
+
+    category["name"] = "other name";
+    expect(category.name).toBe("other name");
   });
 
   test("getter and setter of description props", () => {
@@ -136,5 +139,30 @@ describe("New Category", () => {
       created_at,
     });
     expect(category.created_at).toBe(created_at);
+  });
+
+  test("should update a category", () => {
+    const category = new Category({ name: "Movie" });
+    category.update("Movie 2", "Desc 2");
+    expect(category.name).toBe("Movie 2");
+    expect(category.description).toBe("Desc 2");
+  });
+
+  test("should active a category", () => {
+    const category = new Category({
+      name: "Movie 1",
+      is_active: false,
+    });
+    category.activate();
+    expect(category.is_active).toBeTruthy();
+  });
+
+  test("should disable a category", () => {
+    const category = new Category({
+      name: "Movie 2",
+      is_active: true,
+    });
+    category.deactivate();
+    expect(category.is_active).toBeFalsy();
   });
 });
