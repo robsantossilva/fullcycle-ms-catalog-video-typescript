@@ -2,9 +2,21 @@ import Category, { CategoryProps } from "./category";
 import { omit } from "lodash";
 import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 
+/**
+ * dubles de testes - mock
+ * stub - fake object
+ * spyOn - espionar uma variavel, classe ou método
+ * mock - fake object com expectativas, controle total do comportamento
+ */
+
 describe("New Category", () => {
+  beforeEach(() => {
+    Category.validate = jest.fn();
+  });
+
   it("should be able to create a new category", () => {
     let category = new Category({ name: "Movie" });
+    expect(Category.validate).toHaveBeenCalledTimes(1);
     let props = omit(category.props, "created_at");
     expect(props).toStrictEqual({
       name: "Movie",
@@ -73,7 +85,7 @@ describe("New Category", () => {
     });
   });
 
-  test("getter of name props", () => {
+  test("getter and setter of name props", () => {
     const category = new Category({ name: "Movie" });
     expect(category.name).toBe("Movie");
 
@@ -144,6 +156,7 @@ describe("New Category", () => {
   test("should update a category", () => {
     const category = new Category({ name: "Movie" });
     category.update("Movie 2", "Desc 2");
+    expect(Category.validate).toHaveBeenCalledTimes(2);
     expect(category.name).toBe("Movie 2");
     expect(category.description).toBe("Desc 2");
   });
