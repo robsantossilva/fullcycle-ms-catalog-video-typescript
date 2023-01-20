@@ -2,6 +2,7 @@ import ValidatorRules from "../../../@seedwork/domain/validators/validator-rules
 import Entity from "../../../@seedwork/domain/entity/entity";
 import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 import CategoryValidatorFactory from "../validators/category.validator";
+import { EntityValidationError } from "../../../@seedwork/domain/errors/validation-error";
 
 export type CategoryProps = {
   name: string;
@@ -13,7 +14,7 @@ export type CategoryProps = {
 // id auto incremento?
 // politica e detalhes
 // UUID - Universally Unique Identifier V4 - IETF RFC
-export default class Category extends Entity<CategoryProps> {
+export class Category extends Entity<CategoryProps> {
   constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
     super(props, id);
     Category.validate(props);
@@ -78,6 +79,7 @@ export default class Category extends Entity<CategoryProps> {
 
   static validate(props: Omit<CategoryProps, "created_at">) {
     const validator = CategoryValidatorFactory.create();
-    validator.validate(props);
+    const isValid = validator.validate(props);
+    if (!isValid) throw new EntityValidationError(validator.errors);
   }
 }
